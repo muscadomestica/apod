@@ -9,3 +9,4 @@ if [[ $(curl $picture) != *'Not Found'* ]]; then
 wget -q $picture -O $apod
 fi
 gsettings set org.gnome.desktop.background picture-uri file:///$apod
+ 
