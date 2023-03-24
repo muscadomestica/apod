@@ -1,0 +1,11 @@
+#!/bin/bash
+APODir=~/
+apod=$APODir/apod.jpg
+picture="https://apod.nasa.gov/apod/$(echo $(curl  https://apod.nasa.gov/apod/index.html | grep  -m1 ".jpg" | sed -e 's/<a href=//g' -e 's/"//g' -e 's/>//g'))"
+
+# if you set your wallpaper as an image that you then overwrite, linux mint (and maybe others as well) will only partially load the updated image. Therefore the following command changes your wallpaper to a random image in your local backgrounds folder to ensure the updated image will be loaded in full
+gsettings set org.gnome.desktop.background picture-uri file://$(ls /usr/share/backgrounds/*/*.jpg | head -1)
+if [[ $(curl $picture) != *'Not Found'* ]]; then
+wget -q $picture -O $apod
+fi
+gsettings set org.gnome.desktop.background picture-uri file:///$apod
