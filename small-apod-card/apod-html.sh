@@ -19,9 +19,11 @@ else
 echo -e "<p><video style=max-width:100% controls> <source src=$video type="video/mp4"> alt=\"Todays Astronomy Picture of the Day from NASA\">Your browser does not support the video tag</video></p>" >> $htmlfile
 fi
 
-if [[ $(curl -silent "https://apod.nasa.gov/apod/index.html" | grep -C 1 Copyright) = "" ]]; then
-echo "No Copyright on this image :)" >> /var/www/flies/apod.html
+if [[ $(curl -silent "https://apod.nasa.gov/apod/index.html" | grep "Image Credit") != "" ]]; then
+echo "$(curl -silent https://apod.nasa.gov/apod/index.html | grep -A 3 Credit | sed -e "s/<center>//" -e "s/<a href=/<a target=_blank href=/g")" >> $htmlfile
+elif [[ $(curl -silent "https://apod.nasa.gov/apod/index.html" | grep -C 1 Copyright) = "" ]]; then
+echo "No Copyright on this image :)" >> $htmlfile
 else
 echo "$(curl -silent https://apod.nasa.gov/apod/index.html | grep -C 2 Copyright | sed -e "s/<center>//" -e "s/<a href=/<a target=_blank href=/g")" >> $htmlfile
 fi
-echo -e "</body></html>"
+echo -e "</body></html>" $htmlfile
