@@ -1,0 +1,11 @@
+#!/bin/bash
+APODir=~/Downloads
+apod=$APODir/apod.jpg
+picture="https://apod.nasa.gov/apod/$(echo $(curl https://apod.nasa.gov/apod/index.html | grep  -m1 ".jpg" | sed -e 's/<a href=//g' -e 's/"//g' -e 's/>//g'))"
+
+if [[ $(curl $picture) != *'Not Found'* ]]; then
+curl $picture -o $apod
+#osascript -e 'tell application "Finder" to set desktop picture to POSIX file "$apod"'
+fi
+
+## this only downloads the apod, but does not set it as wallpaper. note that you need to give the terminal permissions to execute cronjobs so extra steps for setting the daily downloads apply
